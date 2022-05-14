@@ -26,7 +26,6 @@
 #
 
 # USB
-
 on boot
     write /sys/class/android_usb/android0/iSerial ${ro.serialno}
     mount configfs none /config
@@ -155,7 +154,7 @@ on property:sys.usb.config=sideload && property:sys.usb.ffs.ready=1 && property:
     write /config/usb_gadget/g1/UDC ${sys.usb.controller}
     setprop sys.usb.state ${sys.usb.config}
 
-# BOOT
+# Boot
 on boot
      export LD_LIBRARY_PATH /sbin:/vendor/lib64:/vendor/lib64/hw
      setprop ro.board.platform trinket
@@ -165,3 +164,14 @@ on fs
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
 
+# Device detection
+on property:ro.boot.device=rav
+    setprop ro.product.device.tw_y_offset 75
+on property:ro.boot.device=sofia
+    setprop ro.product.device.tw_y_offset 122
+on property:ro.boot.device=sofiar
+    setprop ro.product.device.tw_y_offset 122
+on property:ro.boot.device=sofiap
+    setprop ro.product.device.tw_y_offset 122
+on property:ro.boot.device=sofiap_sprout
+    setprop ro.product.device.tw_y_offset 122
