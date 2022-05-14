@@ -25,6 +25,8 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
+import /init.recovery.qcom_decrypt.rc
+
 # USB
 on boot
     write /sys/class/android_usb/android0/iSerial ${ro.serialno}
@@ -154,15 +156,27 @@ on property:sys.usb.config=sideload && property:sys.usb.ffs.ready=1 && property:
     write /config/usb_gadget/g1/UDC ${sys.usb.controller}
     setprop sys.usb.state ${sys.usb.config}
 
+# Modules
+service load_modules /system/bin/load_modules.sh
+    oneshot
+    user root
+    group root
+    disabled
+    seclabel u:r:recovery:s0
+
 # Boot
 on boot
-     export LD_LIBRARY_PATH /sbin:/vendor/lib64:/vendor/lib64/hw
-     setprop ro.board.platform trinket
-     start boot-hal-1-0
+    export LD_LIBRARY_PATH /sbin:/vendor/lib64:/vendor/lib64/hw
+    setprop ro.board.platform trinket
+    start health-hal-2-1
+    start boot-hal-1-0
 
 on fs
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
+
+on post-fs
+    start load_modules
 
 # Device detection
 on property:ro.boot.device=rav

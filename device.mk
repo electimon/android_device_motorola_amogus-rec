@@ -17,11 +17,12 @@ AB_OTA_POSTINSTALL_CONFIG += \
 # Boot control HAL
 PRODUCT_PACKAGES += \
     android.hardware.boot@1.0-impl \
-    android.hardware.boot@1.0-service
+    android.hardware.boot@1.0-service \
+    libion.recovery
 
 PRODUCT_PACKAGES += \
-    bootctrl.trinket \
-    libgptutils.trinket
+    bootctrl.trinket.recovery \
+    libgptutils.trinket.recovery
 
 PRODUCT_PACKAGES += \
     otapreopt_script \
@@ -29,6 +30,14 @@ PRODUCT_PACKAGES += \
     update_engine \
     update_verifier \
     update_engine_sideload
+
+# Fastbootd
+PRODUCT_PACKAGES += \
+    android.hardware.fastboot@1.0-impl-mock \
+    fastbootd
+
+# Dynamic
+PRODUCT_USE_DYNAMIC_PARTITIONS := true
 
 # Soong
 PRODUCT_SOONG_NAMESPACES += \
